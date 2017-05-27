@@ -46,6 +46,34 @@ class LogisticModel(models.BaseModel):
         weights_regularizer=slim.l2_regularizer(l2_penalty))
     return {"predictions": output}
 
+class TestModel(models.BaseModel):
+  """Logistic model with L2 regularization."""
+
+  def create_model(self, model_input, vocab_size, l2_penalty=1e-8, **unused_params):
+    """Creates a logistic model.
+
+    Args:
+      model_input: 'batch' x 'num_features' matrix of input features.
+      vocab_size: The number of classes in the dataset.
+
+    Returns:
+      A dictionary with a tensor containing the probability predictions of the
+      model in the 'predictions' key. The dimensions of the tensor are
+      batch_size x num_classes."""
+    hidden = slim.fully_connected(
+        model_input, 128, activation_fn=tf.nn.relu,
+        weights_initializer=tf.truncated_normal_initializer(stddev=0.01)
+        weights_regularizer=slim.l2_regularizer(l2_penalty))
+    
+    output = slim.fully_connected(
+        hidden, vocab_size, activation_fn=tf.nn.sigmoid,
+        weights_regularizer=slim.l2_regularizer(l2_penalty))
+
+#     output = slim.fully_connected(
+#         model_input, vocab_size, activation_fn=tf.nn.sigmoid,
+#         weights_regularizer=slim.l2_regularizer(l2_penalty))
+    return {"predictions": output}
+
 class MoeModel(models.BaseModel):
   """A softmax over a mixture of logistic models (with L2 regularization)."""
 
