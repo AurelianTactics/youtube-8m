@@ -61,8 +61,9 @@ class TestModel(models.BaseModel):
       model in the 'predictions' key. The dimensions of the tensor are
       batch_size x num_classes."""
     hidden = slim.fully_connected(
-        model_input, 128, activation_fn=tf.nn.relu,
-        weights_initializer=tf.truncated_normal_initializer(stddev=0.01)
+        model_input, 512, activation_fn=tf.nn.relu,
+        #weights_initializer=tf.truncated_normal_initializer(stddev=0.01)
+        weights_initializer=tf.contrib.layers.xavier_initializer(),
         weights_regularizer=slim.l2_regularizer(l2_penalty))
     
     output = slim.fully_connected(
@@ -90,17 +91,17 @@ class SimpleModel(models.BaseModel):
       batch_size x num_classes."""
     hidden1 = slim.fully_connected(
         model_input, 512, activation_fn=tf.nn.relu,
-        weights_initializer=tf.contrib.layers.xavier_initializer()
+        weights_initializer=tf.contrib.layers.xavier_initializer(),
         weights_regularizer=slim.l2_regularizer(l2_penalty))
     
     hidden2 = slim.fully_connected(
         hidden1, 512, activation_fn=tf.nn.relu,
-        weights_initializer=tf.contrib.layers.xavier_initializer()
+        weights_initializer=tf.contrib.layers.xavier_initializer(),
         weights_regularizer=slim.l2_regularizer(l2_penalty))
     
     hidden3 = slim.fully_connected(
         hidden2, 512, activation_fn=tf.nn.relu,
-        weights_initializer=tf.contrib.layers.xavier_initializer()
+        weights_initializer=tf.contrib.layers.xavier_initializer(),
         weights_regularizer=slim.l2_regularizer(l2_penalty))
     
     output = slim.fully_connected(
